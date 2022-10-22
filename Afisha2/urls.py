@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/v1/directors/<int:id>/', views.director_item),
 
 
+
     path('api/v1/movies/', views.movies),
     path('api/v1/movies/<int:id>/', views.movie_item),
 

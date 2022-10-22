@@ -19,10 +19,10 @@ class Director(models.Model):
 
 
 class Movie(models.Model):
-    title = models.CharField(max_length=500)
+    title = models.CharField(max_length=500, null=True)
     description = models.TextField(null=True)
-    duration = models.PositiveIntegerField()
-    director = models.ForeignKey("Director", on_delete=models.PROTECT, null=True)
+    duration = models.PositiveIntegerField(null=True)
+    director = models.ForeignKey("Director", on_delete=models.CASCADE,null=True)
 
 
 
@@ -43,31 +43,12 @@ class Movie(models.Model):
 
 
 
-    # @property
-    # def rating(self):
-    #     reviews = self.reviews.all()
-    #     count = reviews.count()
-    #     average = 0
-    #     for i in reviews:
-    #         average += i.stars
-    #     try:
-    #         return average / count
-    #     except:
-    #         return 0
-    #
-    # @property
-    # def filter_reviews(self):
-    #     return [{'id': i.id, 'text': i.text, 'stars': i.stars}
-    #             for i in self.reviews.filter(stars__gt=3)]
-
-
-
 
 
 class Review(models.Model):
-    text = models.TextField()
-    movie = models.ForeignKey("Movie", on_delete=models.CASCADE, related_name='reviews',null=True)
-    stars = models.IntegerField(default=1)
+    text = models.TextField(null=True)
+    movie = models.ForeignKey("Movie", on_delete=models.CASCADE, related_name='reviews', null=True)
+    stars = models.IntegerField(default=1, null=True)
 
 
 

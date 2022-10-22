@@ -5,26 +5,63 @@ from movie_app.models import Director, Movie, Review
 from movie_app.serializers import DirectorSerializer, MovieSerializer, ReviewSerializer
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def directors(request):
-    directors = Director.objects.all()
-    data = DirectorSerializer(directors, many=True).data
-    return Response(data=data)
+    if request.method == "GET":
+        directors = Director.objects.all()
+        data = DirectorSerializer(directors, many=True).data
+        return Response(data=data)
+    elif request.method == "POST":
+        name = request.data.get('name')
+        Director.objects.create(
+            name=name
+        )
+        return Response()
 
 
-@api_view(['GET'])
+
+
+
+@api_view(['GET', 'POST'])
 def movies(request):
-    movies = Movie.objects.all()
-    data = MovieSerializer(movies, many=True).data
-    return Response(data=data)
+    if request.method == "GET":
+        movies = Movie.objects.all()
+        data = MovieSerializer(movies, many=True).data
+        return Response(data=data)
+    elif request.method == "POST":
+        title = request.data.get('title')
+        description = request.data.get('description')
+        duration = request.data.get('duration')
+        director_id = request.data.get('director_id')
+        Movie.objects.create(
+            title=title,
+            description=description,
+            duration=duration,
+            director_id=director_id
+        )
+        return Response()
 
 
 
-@api_view(['GET'])
+
+
+@api_view(['GET', 'POST'])
 def reviews(request):
-    reviews = Review.objects.all()
-    data = ReviewSerializer(reviews, many=True).data
-    return Response(data=data)
+    if request.method == "GET":
+        reviews = Review.objects.all()
+        data = ReviewSerializer(reviews, many=True).data
+        return Response(data=data)
+    elif request.method == "POST":
+        text = request.data.get('text')
+        stars = request.data.get('stars')
+        movie_id = request.data.get('movie_id')
+        Review.objects.create(
+            text=text,
+            stars=stars,
+            movie_id=movie_id,
+        )
+        return Response()
+
 
 
 @api_view(["GET"])
@@ -35,6 +72,8 @@ def director_item(request, id):
         return Response(status=status.HTTP_404_NOT_FOUND)
     data = DirectorSerializer(director).data
     return Response(data=data)
+
+
 
 
 @api_view(["GET"])
