@@ -64,14 +64,26 @@ def reviews(request):
 
 
 
-@api_view(["GET"])
+@api_view(["GET", "PUT", "DELETE"])
 def director_item(request, id):
     try:
         director = Director.objects.get(id=id)
     except Director.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    data = DirectorSerializer(director).data
-    return Response(data=data)
+    if request.method == "GET":
+        data = DirectorSerializer(director).data
+        return Response(data=data)
+    elif request.method == "DELETE":
+        director.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    elif request.method == "PUT":
+        name = request.data.get('name')
+        director.name = name
+        director.save()
+        return Response(data=DirectorSerializer(director).data)
+
+
+
 
 
 
@@ -82,8 +94,25 @@ def movie_item(request, id):
          movie = Movie.objects.get(id=id)
     except Movie.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    data = MovieSerializer(movie).data
-    return Response(data=data)
+    if request.method == "GET":
+        data = MovieSerializer(movie).data
+        return Response(data=data)
+    elif request.method == "DELETE":
+        movie.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    elif request.method == "PUT":
+        title = request.data.get('title')
+        description = request.data.get('description')
+        duration = request.data.get('duration')
+        director_id = request.data.get('director_id')
+        title.save()
+        description.save()
+        duration.save()
+        director_id.save()
+        return Response(data=MovieSerializer(movie).data)
+
+
+
 
 
 
@@ -93,8 +122,21 @@ def review_item(request, id):
         review = Review.objects.get(id=id)
     except Review.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    data = ReviewSerializer(review).data
-    return Response(data=data)
+    if request.method == "GET":
+        data = ReviewSerializer(review).data
+        return Response(data=data)
+    elif request.method == "DELETE":
+        review.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    elif request.method == "PUT":
+        text = request.data.get('text')
+        stars = request.data.get('stars')
+        movie_id = request.data.get('movie_id')
+        text.save()
+        stars.save()
+        movie_id.save()
+        return Response(data=ReviewSerializer(review).data)
+
 
 
 

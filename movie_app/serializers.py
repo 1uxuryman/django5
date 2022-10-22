@@ -14,13 +14,13 @@ class DirectorSerializer(serializers.ModelSerializer):
 
 
 
-
-
-
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = 'text stars movie_id'.split()
+
+
+
 
 class MovieSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True)
