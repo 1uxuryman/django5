@@ -2,7 +2,14 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from movie_app.models import Director, Movie, Review
-from movie_app.serializers import DirectorSerializer, MovieSerializer, ReviewSerializer
+from movie_app.serializers import DirectorSerializer, \
+    MovieSerializer, \
+    ReviewSerializer,\
+    DirectorValidateSerializers,\
+    MovieValidateSerializers,\
+    ReviesValidateSerializers
+
+
 
 
 @api_view(['GET', 'POST'])
@@ -12,6 +19,10 @@ def directors(request):
         data = DirectorSerializer(directors, many=True).data
         return Response(data=data)
     elif request.method == "POST":
+        serializers = DirectorValidateSerializers(data=request.data)
+        if not serializers.is_valid():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE,
+                            data={'errors':serializers.errors})
         name = request.data.get('name')
         Director.objects.create(
             name=name
@@ -29,6 +40,10 @@ def movies(request):
         data = MovieSerializer(movies, many=True).data
         return Response(data=data)
     elif request.method == "POST":
+        serializers = MovieValidateSerializers(data=request.data)
+        if not serializers.is_valid():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE,
+                            data={'errors':serializers.errors})
         title = request.data.get('title')
         description = request.data.get('description')
         duration = request.data.get('duration')
@@ -52,6 +67,10 @@ def reviews(request):
         data = ReviewSerializer(reviews, many=True).data
         return Response(data=data)
     elif request.method == "POST":
+        serializers = ReviesValidateSerializers(data=request.data)
+        if not serializers.is_valid():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE,
+                            data={'errors':serializers.errors})
         text = request.data.get('text')
         stars = request.data.get('stars')
         movie_id = request.data.get('movie_id')
@@ -77,6 +96,10 @@ def director_item(request, id):
         director.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == "PUT":
+        serializers = DirectorValidateSerializers(data=request.data)
+        if not serializers.is_valid():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE,
+                            data={'errors':serializers.errors})
         name = request.data.get('name')
         director.name = name
         director.save()
@@ -101,6 +124,10 @@ def movie_item(request, id):
         movie.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == "PUT":
+        serialzers = ReviesValidateSerializers(data=request.data)
+        if not serialzers.is_valid():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE,
+                            data={'errors':serialzers.errors})
         title = request.data.get('title')
         description = request.data.get('description')
         duration = request.data.get('duration')
@@ -129,6 +156,10 @@ def review_item(request, id):
         review.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == "PUT":
+        serializers = ReviesValidateSerializers(data=request.data)
+        if not serializers.is_valid():
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE,
+                            data={'errors':serializers.errors})
         text = request.data.get('text')
         stars = request.data.get('stars')
         movie_id = request.data.get('movie_id')
