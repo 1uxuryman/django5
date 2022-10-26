@@ -10,13 +10,6 @@ class Director(models.Model):
     def __str__(self):
         return self.name
 
-        # all_movies = self.movie_set.all().count()
-        # for i in self.movie_set.all():
-        #     all_movies += i.title
-        #     return all_movies
-
-
-
 
 class Movie(models.Model):
     title = models.CharField(max_length=500, null=True)
@@ -54,6 +47,4 @@ class Review(models.Model):
 
     def __str__(self):
         return self.text
-
-
 

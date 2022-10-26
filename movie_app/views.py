@@ -1,13 +1,14 @@
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from movie_app.models import Director, Movie, Review
+from rest_framework import status # импортировал для вывода статуса запроса
+from rest_framework.decorators import api_view, permission_classes  # импортировал декотратор для проверки на валидность проверки
+from rest_framework.response import Response #  импортирвал для выдачи запроса
+from rest_framework.permissions import IsAuthenticated # импортировал класс для проверки  для авторирзованных пользователей
+from movie_app.models import Director, Movie, Review # импортировал модели из главного приложения
 from movie_app.serializers import DirectorSerializer, \
     MovieSerializer, \
     ReviewSerializer,\
     DirectorValidateSerializers,\
     MovieValidateSerializers,\
-    ReviesValidateSerializers
+    ReviesValidateSerializers # импортировал сериалиаторы и валидаторы
 
 
 
@@ -29,11 +30,13 @@ def directors(request):
         )
         return Response()
 
+#  ^- метод для вывода директора гет и пост запроса так же присутствует валидатор и создание директора
 
 
 
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def movies(request):
     if request.method == "GET":
         movies = Movie.objects.all()
@@ -56,6 +59,7 @@ def movies(request):
         )
         return Response()
 
+# ^- тот же метод только для фильмов только здесь присутствует приоверка на правльность пароля для пользователей и доступ коньента авторизованным позльховаеттелям
 
 
 
@@ -81,7 +85,7 @@ def reviews(request):
         )
         return Response()
 
-
+#
 
 @api_view(["GET", "PUT", "DELETE"])
 def director_item(request, id):
@@ -167,10 +171,6 @@ def review_item(request, id):
         stars.save()
         movie_id.save()
         return Response(data=ReviewSerializer(review).data)
-
-
-
-
 
 
 
