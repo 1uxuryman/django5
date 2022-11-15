@@ -23,5 +23,5 @@ urlpatterns = [
     path('api/v1/authorization/', user_views.authorization),
     path('api/v1/registration/', user_views.registration),
 
-
 ]
+

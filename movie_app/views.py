@@ -115,7 +115,7 @@ def director_item(request, id):
 
 
 
-@api_view(["GET"])
+@api_view(["GET","PUT", ])
 def movie_item(request, id):
     try:
          movie = Movie.objects.get(id=id)
